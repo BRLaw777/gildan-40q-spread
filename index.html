@@ -1,0 +1,2246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gildan Activewear (GIL) — 40-Quarter Sell-In vs. Circana/NPD POS Spread Interactive Explorer (2017 Q1 – 2026 Q4E)</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --navy: #0F172A;
+    --slate: #1E293B;
+    --teal: #0D9488;
+    --green: #059669;
+    --red: #DC2626;
+    --amber: #D97706;
+    --bg: #F8FAFC;
+    --card: #FFFFFF;
+    --border: #CBD5E1;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--navy);
+    line-height: 1.45;
+  }
+  header {
+    background: var(--navy);
+    color: #FFFFFF;
+    padding: 18px 28px;
+    border-bottom: 4px solid var(--teal);
+  }
+  header h1 {
+    margin: 0 0 6px 0;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  header p {
+    margin: 0;
+    font-size: 13px;
+    color: #CBD5E1;
+  }
+  .container {
+    max-width: 1480px;
+    margin: 0 auto;
+    padding: 18px 24px 36px 24px;
+  }
+  .controls-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  }
+  .btn-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  button.ctrl-btn {
+    padding: 7px 13px;
+    font-size: 12.5px;
+    font-weight: 600;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: #F1F5F9;
+    color: var(--navy);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  button.ctrl-btn.active, button.ctrl-btn:hover {
+    background: var(--navy);
+    color: #FFFFFF;
+    border-color: var(--navy);
+  }
+  .hint-badge {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--teal);
+    background: #F0FDFA;
+    border: 1px solid #99F6E4;
+    padding: 5px 12px;
+    border-radius: 999px;
+  }
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1.55fr 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+  @media (max-width: 1100px) {
+    .main-grid { grid-template-columns: 1fr; }
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+  }
+  .card h2 {
+    margin: 0 0 10px 0;
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--navy);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .chart-wrap {
+    position: relative;
+    height: 440px;
+    width: 100%;
+  }
+  .detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--navy);
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+  }
+  .qtr-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--navy);
+  }
+  .qtr-sub {
+    font-size: 12px;
+    color: #475569;
+  }
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .kpi-box {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .kpi-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #475569;
+    font-weight: 600;
+  }
+  .kpi-val {
+    font-size: 19px;
+    font-weight: 800;
+    margin-top: 3px;
+  }
+  .kpi-note {
+    font-size: 11px;
+    color: #64748B;
+    margin-top: 2px;
+  }
+  .pos-val { color: var(--green); }
+  .neg-val { color: var(--red); }
+  .neutral-val { color: var(--navy); }
+  .section-tag {
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--teal);
+    margin: 12px 0 6px 0;
+    border-bottom: 1px solid #E2E8F0;
+    padding-bottom: 3px;
+  }
+  .commentary-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+  }
+  .commentary-list li {
+    padding: 6px 0;
+    border-bottom: 1px dashed #E2E8F0;
+  }
+  .commentary-list li:last-child {
+    border-bottom: none;
+  }
+  .commentary-list strong {
+    color: var(--navy);
+  }
+  .pill-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .q-pill {
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #CBD5E1;
+    background: #F8FAFC;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .q-pill.active {
+    background: var(--navy);
+    color: #FFFFFF;
+    border-color: var(--navy);
+  }
+  .q-pill.spread-pos { border-bottom: 3px solid var(--green); }
+  .q-pill.spread-neg { border-bottom: 3px solid var(--red); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Gildan Activewear Inc. (GIL) — 40-Quarter Activewear/Wholesale Sell-In vs. Circana/NPD POS Growth &amp; Spread Explorer (2017 Q1 – 2026 Q4E)</h1>
+  <p>Oakcliff Capital | Click any bar or point on the chart (or any quarter button below) to inspect the complete spreadsheet commentary, Pro Forma HanesBrands bridge, subcategory POS, and DSO/factoring metrics.</p>
+</header>
+
+<div class="container">
+  <div class="controls-bar">
+    <div class="btn-group">
+      <button class="ctrl-btn active" id="btn-all" onclick="setWindow('all')">All 40 Quarters (2017 Q1 – 2026 Q4E)</button>
+      <button class="ctrl-btn" id="btn-post2022" onclick="setWindow('post2022')">2022–2026E Cycle (20 Quarters)</button>
+      <button class="ctrl-btn" id="btn-2024_2026" onclick="setWindow('2024_2026')">2024–2026E Share Gain vs. Channel Stuffing (12 Quarters)</button>
+      <button class="ctrl-btn" id="btn-scale" onclick="toggleScale()">Y-Axis: Capped (±45%) vs. Uncapped (+354% Q2'21)</button>
+    </div>
+    <div class="hint-badge">Click any data point on the graph to view full spreadsheet commentary</div>
+  </div>
+
+  <div class="main-grid">
+    <div class="card">
+      <h2>
+        <span id="chart-title-text">40-Quarter Sell-In YoY %, Disclosed POS YoY %, &amp; Sell-In vs. POS Spread (pp)</span>
+      </h2>
+      <div class="chart-wrap">
+        <canvas id="posSpreadChart"></canvas>
+      </div>
+      <div class="pill-nav" id="pillContainer"></div>
+    </div>
+
+    <div class="card" id="detailCard">
+      <div class="detail-header">
+        <div>
+          <div class="qtr-title" id="d-qtr">2026 Q3</div>
+          <div class="qtr-sub" id="d-date">Period Ended: 2026-09-27 | Basis: Wholesale / Retail Channel</div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button class="ctrl-btn" onclick="stepQuarter(-1)">&#8592; Prev</button>
+          <button class="ctrl-btn" onclick="stepQuarter(1)">Next &#8594;</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-box">
+          <div class="kpi-label">Activewear / PF Whsl Sell-In</div>
+          <div class="kpi-val" id="d-sellin">-10.8%</div>
+          <div class="kpi-note" id="d-sellin-note">Col V (PF Wholesale YoY %)</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Disclosed POS Midpoint</div>
+          <div class="kpi-val" id="d-pos">-5.0%</div>
+          <div class="kpi-note" id="d-pos-note">Col Y (Circana / Call POS)</div>
+        </div>
+        <div class="kpi-box">
+          <div class="kpi-label">Sell-In vs. POS Spread</div>
+          <div class="kpi-val" id="d-spread">-5.8 pp</div>
+          <div class="kpi-note" id="d-spread-note">Col Z (Col V minus Col Y)</div>
+        </div>
+      </div>
+
+      <div class="section-tag">1. Disclosed POS Commentary (Industry &amp; Gildan — Columns W &amp; X)</div>
+      <ul class="commentary-list">
+        <li><strong>Industry Wholesale POS (Col W):</strong> <span id="d-ind-pos"></span></li>
+        <li><strong>Gildan Wholesale POS (Col X):</strong> <span id="d-gil-pos"></span></li>
+      </ul>
+
+      <div class="section-tag">2. Subcategory POS Breakdown (Columns AA, AB, AC &amp; AD)</div>
+      <ul class="commentary-list">
+        <li><strong>Open-End Basic Imprintable Tees (Col AA):</strong> <span id="d-basic"></span></li>
+        <li><strong>Ring-Spun / Fashion Basics (Col AB):</strong> <span id="d-ringspun"></span></li>
+        <li><strong>Fleece Sweatshirts &amp; Hoodies (Col AC):</strong> <span id="d-fleece"></span></li>
+        <li><strong>Retail Innerwear / Hosiery (Col AD):</strong> <span id="d-innerwear"></span></li>
+      </ul>
+
+      <div class="section-tag">3. Revenue, Pro Forma HanesBrands Bridge, DSO &amp; Source (Cols D–U &amp; AE)</div>
+      <ul class="commentary-list">
+        <li><strong>Reported &amp; Pro Forma Sales:</strong> <span id="d-rev-summary"></span></li>
+        <li><strong>Receivables &amp; Economic DSO (incl. Factored AR):</strong> <span id="d-dso-summary"></span></li>
+        <li><strong>Channel Inventory &amp; Guidance Note (Col AE):</strong> <span id="d-inv-note"></span></li>
+        <li><strong>Primary Filing &amp; Transcript Source:</strong> <span id="d-source"></span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+const RAW_DATA = [
+  {
+    "idx": 1,
+    "qtr": "2017 Q1",
+    "yr": 2017,
+    "end_date": "2017-04-02",
+    "basis": "Product Group (2018 Recast)",
+    "tot_rev": 665.4,
+    "tot_yoy": 12.2,
+    "act_rev": 498.6,
+    "act_yoy": null,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 580.5,
+    "can_rev": 31.5,
+    "intl_rev": 53.3,
+    "sell_in_rev": 498.6,
+    "sell_in_yoy": 13.6,
+    "sell_in_basis": "2017 Old Printwear Segment YoY % (incl. Alstyle/AA M&A)",
+    "pos_yoy": null,
+    "spread_pp": null,
+    "sell_in_plot": 13.6,
+    "pos_plot": null,
+    "spread_plot": null,
+    "ind_pos": "Not disclosed in Q1'17 6-K (Q1'17 call transcript not in archive)",
+    "gil_pos": "Not quantified in Q1'17 6-K (sell-in driven by +$39.5M Alstyle/AA & +$20.9M Peds M&A)",
+    "basic_tee_pos": "Not disclosed in 6-K",
+    "ringspun_pos": "Fashion basics sell-in grew via Alstyle/AA M&A (POS not separately disclosed in 6-K)",
+    "fleece_pos": "Not disclosed in 6-K",
+    "innerwear_pos": "Branded Apparel segment sell-in $219.7M (+9.2% YoY, incl. $20.9M Peds M&A)",
+    "channel_inv_note": "Old segments: Printwear $445.6M (+13.6%), Branded $219.7M (+9.2%); $39.5M Alstyle/AA & $20.9M Peds M&A",
+    "source": "Q1 2017 6-K (0001061894-17-000020) & Q1 2018 6-K Note 13 [MEDIUM]",
+    "rep_ar": null,
+    "fac_ar": null,
+    "tot_ar": null,
+    "net_dso": null,
+    "gross_dso": null
+  },
+  {
+    "idx": 2,
+    "qtr": "2017 Q2",
+    "yr": 2017,
+    "end_date": "2017-07-02",
+    "basis": "Product Group (2018 Recast)",
+    "tot_rev": 715.4,
+    "tot_yoy": 3.8,
+    "act_rev": 533.0,
+    "act_yoy": null,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 615.4,
+    "can_rev": 33.8,
+    "intl_rev": 66.1,
+    "sell_in_rev": 533.0,
+    "sell_in_yoy": 1.9,
+    "sell_in_basis": "2017 Old Printwear Segment YoY % (incl. Alstyle/AA M&A)",
+    "pos_yoy": null,
+    "spread_pp": null,
+    "sell_in_plot": 1.9,
+    "pos_plot": null,
+    "spread_plot": null,
+    "ind_pos": "Not disclosed in Q2'17 6-K (Q2'17 call transcript not in archive)",
+    "gil_pos": "Not quantified in Q2'17 6-K (sell-in included ~$29M Printwear M&A & ~$17M Peds M&A)",
+    "basic_tee_pos": "Not disclosed in 6-K",
+    "ringspun_pos": "Sell-in context: double-digit organic unit sales growth in fashion basics (6-K)",
+    "fleece_pos": "Sell-in context: lower fleece unit sales volumes in Q2 (6-K)",
+    "innerwear_pos": "Old Branded Apparel segment sell-in $235.3M (+8.1% YoY, incl. ~$17M Peds M&A)",
+    "channel_inv_note": "Old segments: Printwear $480.1M (+1.9%), Branded $235.3M (+8.1%); Int'l $66,117k",
+    "source": "Q2 2017 6-K (0001061894-17-000031) & Q2 2018 6-K Note 13 [MEDIUM]",
+    "rep_ar": null,
+    "fac_ar": null,
+    "tot_ar": null,
+    "net_dso": null,
+    "gross_dso": null
+  },
+  {
+    "idx": 3,
+    "qtr": "2017 Q3",
+    "yr": 2017,
+    "end_date": "2017-10-01",
+    "basis": "Product Group (2018 Recast)",
+    "tot_rev": 716.4,
+    "tot_yoy": 0.2,
+    "act_rev": 546.2,
+    "act_yoy": null,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 620.0,
+    "can_rev": 32.7,
+    "intl_rev": 63.7,
+    "sell_in_rev": 546.2,
+    "sell_in_yoy": 4.1,
+    "sell_in_basis": "2017 Old Printwear Segment YoY % (incl. Alstyle/AA M&A)",
+    "pos_yoy": null,
+    "spread_pp": null,
+    "sell_in_plot": 4.1,
+    "pos_plot": null,
+    "spread_plot": null,
+    "ind_pos": "Retail sock market weakness noted in Q3'17 6-K; printwear POS not quantified",
+    "gil_pos": "Not quantified in Q3'17 6-K",
+    "basic_tee_pos": "Sell-in context: lower unit sales of open-end basics (6-K)",
+    "ringspun_pos": "Sell-in context: strong fashion and performance basics sales (6-K)",
+    "fleece_pos": "Not disclosed in 6-K",
+    "innerwear_pos": "Old Branded Apparel sell-in $235.7M (-6.9% YoY) on sock market weakness & program transition",
+    "channel_inv_note": "Old segments: Printwear $480.7M (+4.1%), Branded $235.7M (-6.9%)",
+    "source": "Q3 2017 6-K (0001061894-17-000038) & Q3 2018 6-K Note 13 [MEDIUM]",
+    "rep_ar": null,
+    "fac_ar": null,
+    "tot_ar": null,
+    "net_dso": null,
+    "gross_dso": null
+  },
+  {
+    "idx": 4,
+    "qtr": "2017 Q4",
+    "yr": 2017,
+    "end_date": "2017-12-31",
+    "basis": "Product Group (2018 Recast)",
+    "tot_rev": 653.7,
+    "tot_yoy": 11.2,
+    "act_rev": 465.4,
+    "act_yoy": null,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 565.3,
+    "can_rev": 33.0,
+    "intl_rev": 55.4,
+    "sell_in_rev": 465.4,
+    "sell_in_yoy": 27.6,
+    "sell_in_basis": "2017 Old Printwear Segment YoY % (incl. Alstyle/AA M&A)",
+    "pos_yoy": null,
+    "spread_pp": null,
+    "sell_in_plot": 27.6,
+    "pos_plot": null,
+    "spread_plot": null,
+    "ind_pos": "Not quantified in FY17 release",
+    "gil_pos": "Not quantified in FY17 release",
+    "basic_tee_pos": "Sell-in context: higher basic unit shipments in Q4 (6-K)",
+    "ringspun_pos": "Sell-in context: strong fashion basics sales (6-K)",
+    "fleece_pos": "Sell-in context: strong fleece shipments in Q4 (6-K)",
+    "innerwear_pos": "Old Branded Apparel sell-in $238.1M (-9.2% YoY)",
+    "channel_inv_note": "Old segments: Printwear $415.6M (+27.6% rep / +22.5% organic), Branded $238.1M (-9.2%)",
+    "source": "Q4 2017 6-K (0001061894-18-000003) & Q4 2018 6-K [MEDIUM]",
+    "rep_ar": null,
+    "fac_ar": null,
+    "tot_ar": null,
+    "net_dso": null,
+    "gross_dso": null
+  },
+  {
+    "idx": 5,
+    "qtr": "2018 Q1",
+    "yr": 2018,
+    "end_date": "2018-04-01",
+    "basis": "Product Group",
+    "tot_rev": 647.3,
+    "tot_yoy": -2.7,
+    "act_rev": 514.5,
+    "act_yoy": 3.2,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 555.8,
+    "can_rev": 25.4,
+    "intl_rev": 66.0,
+    "sell_in_rev": 514.5,
+    "sell_in_yoy": 3.2,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": null,
+    "spread_pp": null,
+    "sell_in_plot": 3.2,
+    "pos_plot": null,
+    "spread_plot": null,
+    "ind_pos": "NPD men's underwear market POS down YoY; wholesale printwear POS not quantified in 6-K",
+    "gil_pos": "Branded underwear POS strong, outpacing NPD men's underwear market; Int'l sales +23.8%",
+    "basic_tee_pos": "Not separately quantified in 6-K",
+    "ringspun_pos": "Sell-in context: double-digit fashion basics sales growth (6-K)",
+    "fleece_pos": "Not separately quantified in 6-K",
+    "innerwear_pos": "Gildan branded underwear POS outpaced declining NPD men's underwear market; mass sock shift (-20.4% H/U sell-in)",
+    "channel_inv_note": "Distributor restocking in advance of March 2018 price increase (documented retrospectively in FY18/Q1'19 filings)",
+    "source": "Q1 2018 6-K (0001061894-18-000019) & Q1 2019 6-K [MEDIUM]",
+    "rep_ar": null,
+    "fac_ar": null,
+    "tot_ar": null,
+    "net_dso": null,
+    "gross_dso": null
+  },
+  {
+    "idx": 6,
+    "qtr": "2018 Q2",
+    "yr": 2018,
+    "end_date": "2018-07-01",
+    "basis": "Product Group",
+    "tot_rev": 764.2,
+    "tot_yoy": 6.8,
+    "act_rev": 625.2,
+    "act_yoy": 17.3,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 644.7,
+    "can_rev": 30.1,
+    "intl_rev": 89.4,
+    "sell_in_rev": 625.2,
+    "sell_in_yoy": 17.3,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": null,
+    "spread_pp": null,
+    "sell_in_plot": 17.3,
+    "pos_plot": null,
+    "spread_plot": null,
+    "ind_pos": "Not quantified in Q2'18 6-K",
+    "gil_pos": "Not quantified in Q2'18 6-K (Activewear sell-in +17.3%; Int'l sales +35.2%)",
+    "basic_tee_pos": "Sell-in context: higher imprintable unit shipments",
+    "ringspun_pos": "Sell-in context: continued momentum in fashion basics sales",
+    "fleece_pos": "Sell-in context: strong double-digit fleece shipment growth (6-K)",
+    "innerwear_pos": "Hosiery & Underwear sell-in -23.8% on mass-retail sock transition to private label",
+    "channel_inv_note": "Activewear sell-in +17.3% ($625.2M); Canada $30,089k / Int'l $89,441k",
+    "source": "Q2 2018 6-K (0001061894-18-000029) \u00a75.4.1 & Note 13 [MEDIUM]",
+    "rep_ar": null,
+    "fac_ar": null,
+    "tot_ar": null,
+    "net_dso": null,
+    "gross_dso": null
+  },
+  {
+    "idx": 7,
+    "qtr": "2018 Q3",
+    "yr": 2018,
+    "end_date": "2018-09-30",
+    "basis": "Product Group",
+    "tot_rev": 754.4,
+    "tot_yoy": 5.3,
+    "act_rev": 612.4,
+    "act_yoy": 12.1,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 642.6,
+    "can_rev": 30.4,
+    "intl_rev": 81.3,
+    "sell_in_rev": 612.4,
+    "sell_in_yoy": 12.1,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": null,
+    "spread_pp": null,
+    "sell_in_plot": 12.1,
+    "pos_plot": null,
+    "spread_plot": null,
+    "ind_pos": "NPD industry sock demand down YoY; printwear POS not quantified in 6-K",
+    "gil_pos": "Not quantified in Q3'18 6-K (Activewear sell-in +12.1%)",
+    "basic_tee_pos": "Sell-in context: higher imprintable shipments despite Hurricane Florence disruption",
+    "ringspun_pos": "Sell-in context: higher fashion basics, e-commerce, & GLB sales",
+    "fleece_pos": "Sell-in context: higher fleece shipments",
+    "innerwear_pos": "Hosiery & Underwear sell-in -16.6% (including ~$15M lost sales from Hurricane Florence)",
+    "channel_inv_note": "Hurricane Florence disrupted total Q3 sales by ~$30M (incl. ~$15M lost H/U sales); Canada $30,414k / Int'l $81,322k",
+    "source": "Q3 2018 6-K (0001061894-18-000035) \u00a75.4.1 & Note 13 [MEDIUM]",
+    "rep_ar": null,
+    "fac_ar": null,
+    "tot_ar": null,
+    "net_dso": null,
+    "gross_dso": null
+  },
+  {
+    "idx": 8,
+    "qtr": "2018 Q4",
+    "yr": 2018,
+    "end_date": "2018-12-30",
+    "basis": "Product Group",
+    "tot_rev": 742.7,
+    "tot_yoy": 13.6,
+    "act_rev": 569.3,
+    "act_yoy": 22.3,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 641.8,
+    "can_rev": 34.8,
+    "intl_rev": 66.1,
+    "sell_in_rev": 569.3,
+    "sell_in_yoy": 22.3,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": null,
+    "spread_pp": null,
+    "sell_in_plot": 22.3,
+    "pos_plot": null,
+    "spread_plot": null,
+    "ind_pos": "Not quantified in Q4'18 release",
+    "gil_pos": "Not quantified in Q4'18 release (Activewear sell-in +22.3%; Int'l shipments +29%)",
+    "basic_tee_pos": "Sell-in context: higher imprintable unit volumes",
+    "ringspun_pos": "Sell-in context: higher fashion basics shipments",
+    "fleece_pos": "Sell-in context: higher fleece shipments drove favorable Q4 product mix",
+    "innerwear_pos": "Hosiery & Underwear sell-in -7.9% (lower mass sock replenishment, partly offset by private-label underwear)",
+    "channel_inv_note": "Activewear sell-in +22.3% ($569.3M); Canada $34.8M / Int'l $66.1M",
+    "source": "Q4 2018 6-K (0001061894-19-000005) & FY2018 Annual Report [MEDIUM]",
+    "rep_ar": null,
+    "fac_ar": null,
+    "tot_ar": null,
+    "net_dso": null,
+    "gross_dso": null
+  },
+  {
+    "idx": 9,
+    "qtr": "2019 Q1",
+    "yr": 2019,
+    "end_date": "2019-03-31",
+    "basis": "Product Group",
+    "tot_rev": 623.9,
+    "tot_yoy": -3.6,
+    "act_rev": 493.6,
+    "act_yoy": -4.1,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 530.8,
+    "can_rev": 25.8,
+    "intl_rev": 67.3,
+    "sell_in_rev": 493.6,
+    "sell_in_yoy": -4.1,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": null,
+    "spread_pp": null,
+    "sell_in_plot": -4.1,
+    "pos_plot": null,
+    "spread_plot": null,
+    "ind_pos": "Not quantified in Q1'19 6-K (archive file is AGM transcript, not Q1 call)",
+    "gil_pos": "Not quantified in Q1'19 6-K",
+    "basic_tee_pos": "Sell-in context: lower basic unit volumes vs. Q1'18 pre-price-hike restocking",
+    "ringspun_pos": "Sell-in context: higher fashion basics sales",
+    "fleece_pos": "Sell-in context: double-digit fleece shipment growth (6-K)",
+    "innerwear_pos": "New private-label men's underwear program rollout; mass Gildan sock sales down",
+    "channel_inv_note": "Lower distributor restocking vs. Q1'18 pre-March price hike; $24.4M A/R impairment ($21.7M Heritage, $2.5M Payless)",
+    "source": "Q1 2019 6-K (0001061894-19-000021) [MEDIUM]",
+    "rep_ar": null,
+    "fac_ar": null,
+    "tot_ar": null,
+    "net_dso": null,
+    "gross_dso": null
+  },
+  {
+    "idx": 10,
+    "qtr": "2019 Q2",
+    "yr": 2019,
+    "end_date": "2019-06-30",
+    "basis": "Product Group",
+    "tot_rev": 801.6,
+    "tot_yoy": 4.9,
+    "act_rev": 665.6,
+    "act_yoy": 6.5,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 683.9,
+    "can_rev": 27.3,
+    "intl_rev": 90.5,
+    "sell_in_rev": 665.6,
+    "sell_in_yoy": 6.5,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": null,
+    "spread_pp": null,
+    "sell_in_plot": 6.5,
+    "pos_plot": null,
+    "spread_plot": null,
+    "ind_pos": "Not quantified in Q2'19 6-K (Q2'19 call transcript not in archive)",
+    "gil_pos": "Not quantified in Q2'19 6-K (Activewear sell-in +6.5% to $665.6M)",
+    "basic_tee_pos": "Sell-in context: lower unit sales volumes of open-end basics (6-K)",
+    "ringspun_pos": "Sell-in context: higher unit sales of fashion basics (6-K)",
+    "fleece_pos": "Sell-in context: higher fleece unit sales volumes (6-K)",
+    "innerwear_pos": "Hosiery & Underwear sell-in -2.2% ($136.0M); private-label underwear growth offset sock decline",
+    "channel_inv_note": "Record $801.6M Q2 sales; U.S. $683,876k / Canada $27,300k / Int'l $90,459k",
+    "source": "Q2 2019 6-K (0001061894-19-000032) [MEDIUM]",
+    "rep_ar": null,
+    "fac_ar": null,
+    "tot_ar": null,
+    "net_dso": null,
+    "gross_dso": null
+  },
+  {
+    "idx": 11,
+    "qtr": "2019 Q3",
+    "yr": 2019,
+    "end_date": "2019-09-29",
+    "basis": "Product Group",
+    "tot_rev": 739.7,
+    "tot_yoy": -1.9,
+    "act_rev": 619.2,
+    "act_yoy": 1.1,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 632.5,
+    "can_rev": 27.1,
+    "intl_rev": 80.0,
+    "sell_in_rev": 619.2,
+    "sell_in_yoy": 1.1,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": -8.0,
+    "spread_pp": 9.1,
+    "sell_in_plot": 1.1,
+    "pos_plot": -8.0,
+    "spread_plot": 9.1,
+    "ind_pos": "NPD retail sock units down >4% & men's underwear units down ~5%; wholesale industry POS not separately quantified",
+    "gil_pos": "Down high-single digits in North American imprintables POS (Basics down; Fashion Basics & Fleece POS positive)",
+    "basic_tee_pos": "Negative (drove the Q3 North American imprintables POS decline; exact % not disclosed)",
+    "ringspun_pos": "Positive POS (fashion basics POS remained positive in Q3)",
+    "fleece_pos": "Positive POS & higher North American fleece sales",
+    "innerwear_pos": "NPD sock units down >4% and men's underwear units down ~5%; H/U sell-in -15.1%",
+    "channel_inv_note": "Oct 17, 2019 warning (0001628280-19-012394): ~$50M Q3 sales shortfall; ~$70M Q4 demand reduction + ~$100M Q4 distributor destocking",
+    "source": "Q3 2019 6-K (0001061894-19-000038), Oct 17 6-K & Q3 Call [MEDIUM]",
+    "rep_ar": null,
+    "fac_ar": null,
+    "tot_ar": null,
+    "net_dso": null,
+    "gross_dso": null
+  },
+  {
+    "idx": 12,
+    "qtr": "2019 Q4",
+    "yr": 2019,
+    "end_date": "2019-12-29",
+    "basis": "Product Group",
+    "tot_rev": 658.6,
+    "tot_yoy": -11.3,
+    "act_rev": 483.5,
+    "act_yoy": -15.1,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 552.0,
+    "can_rev": 34.6,
+    "intl_rev": 72.0,
+    "sell_in_rev": 483.5,
+    "sell_in_yoy": -15.1,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": -5.0,
+    "spread_pp": -10.1,
+    "sell_in_plot": -15.1,
+    "pos_plot": -5.0,
+    "spread_plot": -10.1,
+    "ind_pos": "NPD men's underwear & sock market demand down YoY; wholesale industry POS not separately quantified",
+    "gil_pos": "Negative NA imprintables POS (improving toward year-end; only heavy basics were down; Fashion Basics & Fleece positive)",
+    "basic_tee_pos": "Negative ('only the heavy basics' dragged down Q4 POS; lighter/mid-weight improving)",
+    "ringspun_pos": "Positive ('our Fashion Basics are doing well')",
+    "fleece_pos": "Positive ('our fleece is doing well')",
+    "innerwear_pos": "NPD men's underwear & sock demand down YoY; H/U sell-in +1.0% on private-label underwear",
+    "channel_inv_note": "Q4 distributor destocking (~$100M expected impact; Activewear sell-in -15.1%) + $55M Back-to-Basics SKU charge (~$48M inv + ~$7M GP)",
+    "source": "Q4 2019 6-K (0001061894-20-000006), FY19 MD&A & Q4 Call [MEDIUM]",
+    "rep_ar": null,
+    "fac_ar": null,
+    "tot_ar": null,
+    "net_dso": null,
+    "gross_dso": null
+  },
+  {
+    "idx": 13,
+    "qtr": "2020 Q1",
+    "yr": 2020,
+    "end_date": "2020-03-29",
+    "basis": "Product Group",
+    "tot_rev": 459.1,
+    "tot_yoy": -26.4,
+    "act_rev": 372.6,
+    "act_yoy": -24.5,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 389.3,
+    "can_rev": 16.3,
+    "intl_rev": 53.4,
+    "sell_in_rev": 372.6,
+    "sell_in_yoy": -24.5,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": -18.0,
+    "spread_pp": -6.5,
+    "sell_in_plot": -24.5,
+    "pos_plot": -18.0,
+    "spread_plot": -6.5,
+    "ind_pos": "Not separately quantified from company POS on Q1'20 call",
+    "gil_pos": "3rd week March ~-50%; late March & April ~-75% in NA & Europe (-65% Asia) as COVID lockdowns hit (full-Q1 avg not stated)",
+    "basic_tee_pos": "Collapsed in late March lockdowns (subcategory % not separately quantified)",
+    "ringspun_pos": "Down in late March lockdowns (subcategory % not separately quantified)",
+    "fleece_pos": "Down in late March lockdowns (subcategory % not separately quantified)",
+    "innerwear_pos": "Retail POS decelerated sharply in March and was down ~-45% in April",
+    "channel_inv_note": "Activewear sell-in -24.5% as COVID lockdowns halted distributor orders in late March",
+    "source": "Q1 2020 6-K & Call p. 5; Q1 2021 6-K comparative [MEDIUM]",
+    "rep_ar": null,
+    "fac_ar": null,
+    "tot_ar": null,
+    "net_dso": null,
+    "gross_dso": null
+  },
+  {
+    "idx": 14,
+    "qtr": "2020 Q2",
+    "yr": 2020,
+    "end_date": "2020-06-28",
+    "basis": "Product Group",
+    "tot_rev": 229.7,
+    "tot_yoy": -71.3,
+    "act_rev": 131.6,
+    "act_yoy": -80.2,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 185.7,
+    "can_rev": 8.6,
+    "intl_rev": 35.4,
+    "sell_in_rev": 131.6,
+    "sell_in_yoy": -80.2,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": -50.0,
+    "spread_pp": -30.2,
+    "sell_in_plot": -45.0,
+    "pos_plot": -45.0,
+    "spread_plot": -30.2,
+    "ind_pos": "Not separately quantified from company POS on Q2'20 call",
+    "gil_pos": "Company U.S. imprintables POS ~-50% Q2 average (~-80% April -> ~-50% May -> ~-20% June; Fashion Basics & Fleece positive in June)",
+    "basic_tee_pos": "Negative in Q2 due to cancelled events/gatherings (exact subcategory % not stated)",
+    "ringspun_pos": "Turned positive YoY in the month of June 2020",
+    "fleece_pos": "Turned positive YoY in the month of June 2020",
+    "innerwear_pos": "Mass & online retail POS up double digits in July/current trend; Q2 H/U sell-in -27.9% on store closures",
+    "channel_inv_note": "Heavy distributor destocking: Activewear sell-in fell -80.2% vs. ~-50% company U.S. POS; Canada $8,555k / Int'l $35,411k",
+    "source": "Q2 2020 6-K & Call p. 3, 5; Q2 2021 6-K comparative [MEDIUM]",
+    "rep_ar": null,
+    "fac_ar": null,
+    "tot_ar": null,
+    "net_dso": null,
+    "gross_dso": null
+  },
+  {
+    "idx": 15,
+    "qtr": "2020 Q3",
+    "yr": 2020,
+    "end_date": "2020-09-27",
+    "basis": "Product Group",
+    "tot_rev": 602.3,
+    "tot_yoy": -18.6,
+    "act_rev": 456.3,
+    "act_yoy": -26.3,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 517.1,
+    "can_rev": 25.4,
+    "intl_rev": 59.8,
+    "sell_in_rev": 456.3,
+    "sell_in_yoy": -26.3,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": -17.5,
+    "spread_pp": -8.8,
+    "sell_in_plot": -26.3,
+    "pos_plot": -17.5,
+    "spread_plot": -8.8,
+    "ind_pos": "Not separately quantified from company POS on Q3'20 call",
+    "gil_pos": "Company NA imprintables POS down -15% to -20% on average in Q3 (Fashion Basics & Fleece POS positive; Basics negative)",
+    "basic_tee_pos": "Negative in Q3 (exact % not stated; turned positive in October)",
+    "ringspun_pos": "Positive YoY in Q3 (and accelerating in early Q4)",
+    "fleece_pos": "Positive YoY in Q3 (and accelerating in early Q4)",
+    "innerwear_pos": "Strong retail POS sell-through; Hosiery & Underwear sell-in +21.2% led by underwear",
+    "channel_inv_note": "Continued distributor destocking in Q3 (-26.3% Activewear sell-in vs. -15% to -20% NA POS); Canada $25,399k / Int'l $59,808k",
+    "source": "Q3 2020 6-K & Call p. 3, 8; Q3 2021 6-K comparative [MEDIUM]",
+    "rep_ar": null,
+    "fac_ar": null,
+    "tot_ar": null,
+    "net_dso": null,
+    "gross_dso": null
+  },
+  {
+    "idx": 16,
+    "qtr": "2020 Q4",
+    "yr": 2020,
+    "end_date": "2021-01-03",
+    "basis": "Product Group",
+    "tot_rev": 690.2,
+    "tot_yoy": 4.8,
+    "act_rev": 537.9,
+    "act_yoy": 11.3,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 604.7,
+    "can_rev": 25.9,
+    "intl_rev": 59.6,
+    "sell_in_rev": 537.9,
+    "sell_in_yoy": 11.3,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": -9.0,
+    "spread_pp": 20.3,
+    "sell_in_plot": 11.3,
+    "pos_plot": -9.0,
+    "spread_plot": 20.3,
+    "ind_pos": "Not separately quantified from company POS on Q4'20 call",
+    "gil_pos": "Company NA imprintables POS sequentially improved to down just under -10% YoY (Fleece & Fashion Basics positive)",
+    "basic_tee_pos": "Turned positive in Oct before winter COVID wave pulled overall Q4 imprintables POS to down just under -10%",
+    "ringspun_pos": "Positive YoY in Q4",
+    "fleece_pos": "Positive YoY in Q4 ('Fleece has been a good category through the pandemic')",
+    "innerwear_pos": "Underwear POS positive YoY; sock category POS down YoY",
+    "channel_inv_note": "Activewear sell-in +11.3% on non-recurrence of Q4'19 destocking; Canada $25.9M / Int'l $59.6M",
+    "source": "Q4 2020 6-K (0001061894-21-000004) & Call p. 3 [MEDIUM]",
+    "rep_ar": null,
+    "fac_ar": null,
+    "tot_ar": null,
+    "net_dso": null,
+    "gross_dso": null
+  },
+  {
+    "idx": 17,
+    "qtr": "2021 Q1",
+    "yr": 2021,
+    "end_date": "2021-04-04",
+    "basis": "Product Group",
+    "tot_rev": 589.6,
+    "tot_yoy": 28.4,
+    "act_rev": 484.6,
+    "act_yoy": 30.1,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 506.8,
+    "can_rev": 22.6,
+    "intl_rev": 60.2,
+    "sell_in_rev": 484.6,
+    "sell_in_yoy": 30.1,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": 12.0,
+    "spread_pp": 18.1,
+    "sell_in_plot": 30.1,
+    "pos_plot": 12.0,
+    "spread_plot": 18.1,
+    "ind_pos": "Not separately quantified from company POS on Q1'21 call",
+    "gil_pos": "Positive YoY vs. Q1'20; down 10%\u201315% vs. pre-COVID Q1 2019 (~-10% vs. 2019 entering Q2; Fashion & Fleece positive vs. 2019)",
+    "basic_tee_pos": "Below 2019 levels due to limited large gatherings/events",
+    "ringspun_pos": "Positive vs. pre-COVID 2019 ('driven by fashion T-shirts and fleece')",
+    "fleece_pos": "Positive vs. pre-COVID 2019",
+    "innerwear_pos": "Hosiery & Underwear sell-in +21.4% ($105.0M)",
+    "channel_inv_note": "Activewear +30.1% on YoY POS growth + net distributor restocking (channel inv still well below 2019); U.S. $506,820k / Can $22,594k / Int'l $60,171k",
+    "source": "Q1 2021 6-K, Q1 2022 6-K comparative & Q1'21 Call p. 3\u20134 [MEDIUM]",
+    "rep_ar": 266.6,
+    "fac_ar": 88.0,
+    "tot_ar": 354.6,
+    "net_dso": 40.9,
+    "gross_dso": 54.4
+  },
+  {
+    "idx": 18,
+    "qtr": "2021 Q2",
+    "yr": 2021,
+    "end_date": "2021-07-04",
+    "basis": "Product Group",
+    "tot_rev": 747.2,
+    "tot_yoy": 225.3,
+    "act_rev": 597.1,
+    "act_yoy": 353.7,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 641.3,
+    "can_rev": 25.1,
+    "intl_rev": 80.8,
+    "sell_in_rev": 597.1,
+    "sell_in_yoy": 353.7,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": 84.0,
+    "spread_pp": 269.7,
+    "sell_in_plot": 45.0,
+    "pos_plot": 45.0,
+    "spread_plot": 45.0,
+    "ind_pos": "Not separately quantified from company POS on Q2'21 call",
+    "gil_pos": "Overall imprintables POS -8% vs. Q2 2019 (NA down single digits vs. 2019 and improving in July; Int'l ~-30% vs. 2019)",
+    "basic_tee_pos": "Recovering as gatherings return (subcategory % not separately quantified)",
+    "ringspun_pos": "Strong sell-through to screen-printers servicing mass retail (subcategory % not separately quantified)",
+    "fleece_pos": "2017\u20132021 fleece net sales grew at a double-digit CAGR (2022 Inv. Day Slide 24; Q2'21 POS not separately quantified)",
+    "innerwear_pos": "Double-digit YoY POS growth in underwear; overall Retail POS above Q2 2019 levels",
+    "channel_inv_note": "Activewear +353.7% YoY on POS rebound + non-recurrence of Q2'20 COVID destocking; U.S. $641,254k / Can $25,149k / Int'l $80,750k",
+    "source": "Q2 2021 6-K, Q2 2022 6-K comparative & Q2'21 Call p. 3 [MEDIUM]",
+    "rep_ar": 343.2,
+    "fac_ar": 121.0,
+    "tot_ar": 464.2,
+    "net_dso": 41.6,
+    "gross_dso": 56.2
+  },
+  {
+    "idx": 19,
+    "qtr": "2021 Q3",
+    "yr": 2021,
+    "end_date": "2021-10-03",
+    "basis": "Product Group",
+    "tot_rev": 801.6,
+    "tot_yoy": 33.1,
+    "act_rev": 655.8,
+    "act_yoy": 43.7,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 685.9,
+    "can_rev": 36.1,
+    "intl_rev": 79.6,
+    "sell_in_rev": 655.8,
+    "sell_in_yoy": 43.7,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": 25.0,
+    "spread_pp": 18.7,
+    "sell_in_plot": 43.7,
+    "pos_plot": 25.0,
+    "spread_plot": 18.7,
+    "ind_pos": "Not separately quantified from company POS on Q3'21 call",
+    "gil_pos": "Total imprintables POS turned POSITIVE vs. pre-COVID Q3 2019 (driven by positive NA POS; Int'l POS still lagging 2019)",
+    "basic_tee_pos": "Recovering as events return (constrained by yarn labor shortage)",
+    "ringspun_pos": "Strong demand (subcategory % not separately quantified)",
+    "fleece_pos": "Strong demand (subcategory % not separately quantified)",
+    "innerwear_pos": "Positive retail sell-through; H/U sell-in flat (-0.1%) due to tight yarn allocation",
+    "channel_inv_note": "Channel inventory still ~50% of 2019 levels due to yarn labor constraints; U.S. $685,904k / Can $36,113k / Int'l $79,564k",
+    "source": "Q3 2021 6-K & Call p. 3, final Q&A [MEDIUM]",
+    "rep_ar": 347.7,
+    "fac_ar": 130.0,
+    "tot_ar": 477.7,
+    "net_dso": 39.3,
+    "gross_dso": 53.9
+  },
+  {
+    "idx": 20,
+    "qtr": "2021 Q4",
+    "yr": 2021,
+    "end_date": "2022-01-02",
+    "basis": "Product Group",
+    "tot_rev": 784.3,
+    "tot_yoy": 13.6,
+    "act_rev": 627.2,
+    "act_yoy": 16.6,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 692.6,
+    "can_rev": 30.9,
+    "intl_rev": 60.7,
+    "sell_in_rev": 627.2,
+    "sell_in_yoy": 16.6,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": 15.0,
+    "spread_pp": 1.6,
+    "sell_in_plot": 16.6,
+    "pos_plot": 15.0,
+    "spread_plot": 1.6,
+    "ind_pos": "Not separately quantified from company POS on Q4'21 call",
+    "gil_pos": "Positive YoY and above pre-COVID 2019 levels ('POS is very strong')",
+    "basic_tee_pos": "Positive ('seeing the benefit of social gatherings and our basic product coming back to the market')",
+    "ringspun_pos": "Strong growth in fashion basics and online/creator channels (exact % not stated)",
+    "fleece_pos": "Strong POS (Q4 sell-in mix affected by timing of fleece shipments vs. Q4'20)",
+    "innerwear_pos": "Underwear POS positive; lower sock sales; H/U sell-in $157.1M (+3.1%)",
+    "channel_inv_note": "4-wall distributor inventory still roughly half of 2019 levels & below prior year; acquired Frontier Yarns Dec 2021; U.S. $692.6M / Can $30.9M / Int'l $60.7M",
+    "source": "FY2021 40-F, Q4 2022 6-K comparative & Q4'21 Call [MEDIUM]",
+    "rep_ar": 330.0,
+    "fac_ar": 145.0,
+    "tot_ar": 475.0,
+    "net_dso": 38.1,
+    "gross_dso": 54.8
+  },
+  {
+    "idx": 21,
+    "qtr": "2022 Q1",
+    "yr": 2022,
+    "end_date": "2022-04-03",
+    "basis": "Product Group",
+    "tot_rev": 774.9,
+    "tot_yoy": 31.4,
+    "act_rev": 667.3,
+    "act_yoy": 37.7,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 681.8,
+    "can_rev": 30.2,
+    "intl_rev": 62.9,
+    "sell_in_rev": 667.3,
+    "sell_in_yoy": 37.7,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": 10.0,
+    "spread_pp": 27.7,
+    "sell_in_plot": 37.7,
+    "pos_plot": 10.0,
+    "spread_plot": 27.7,
+    "ind_pos": "Jan\u2013Feb 2022 printwear POS retrospectively described as 'booming' (Q4'22 call); Mar 2022 Inv. Day sized NA Activewear TAM at ~$11B",
+    "gil_pos": "Positive POS + heavy 1H22 distributor inventory restocking (archive file is AGM transcript, not Q1 call)",
+    "basic_tee_pos": "2022 Inv. Day Slide 17: Open-end tees = ~50% of T-shirt $ and ~2/3 of T-shirt units (LSD\u2013MSD projected CAGR)",
+    "ringspun_pos": "2022 Inv. Day Slide 17: Ring-spun tees = ~50% of T-shirt $ and ~1/3 of T-shirt units (MSD projected CAGR)",
+    "fleece_pos": "2022 Inv. Day Slides 17 & 24: NA Fleece TAM ~$4B (MSD\u2013HSD projected CAGR; Gildan DD net sales CAGR 2017\u201321)",
+    "innerwear_pos": "Hosiery & Underwear sell-in +2.5% ($107.6M)",
+    "channel_inv_note": "Heavy distributor restocking in Q1\u2013Q2 2022 (+37.7% Activewear sell-in); U.S. $681,820k / Can $30,194k / Int'l $62,857k",
+    "source": "Q1 2022 6-K, Mar 29, 2022 Investor Day Slides 14\u201326 & Q1'23 Call [MEDIUM]",
+    "rep_ar": 460.7,
+    "fac_ar": 102.0,
+    "tot_ar": 562.7,
+    "net_dso": 53.8,
+    "gross_dso": 65.7
+  },
+  {
+    "idx": 22,
+    "qtr": "2022 Q2",
+    "yr": 2022,
+    "end_date": "2022-07-03",
+    "basis": "Product Group",
+    "tot_rev": 895.6,
+    "tot_yoy": 19.9,
+    "act_rev": 757.8,
+    "act_yoy": 26.9,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 796.1,
+    "can_rev": 31.4,
+    "intl_rev": 68.1,
+    "sell_in_rev": 757.8,
+    "sell_in_yoy": 26.9,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": 3.0,
+    "spread_pp": 23.9,
+    "sell_in_plot": 26.9,
+    "pos_plot": 3.0,
+    "spread_plot": 23.9,
+    "ind_pos": "Wholesale distributor POS positive; National Account / Retail POS slowed in June\u2013July",
+    "gil_pos": "Very strong ring-spun & 3-end fleece POS in U.S. distributors; National Accounts/Retail dragged in June\u2013July",
+    "basic_tee_pos": "Moderated as national accounts/retail slowed",
+    "ringspun_pos": "Very strong POS and market share gains in U.S. printwear",
+    "fleece_pos": "Very strong POS and sell-in (3-end fleece highlighted on Q2'22 call)",
+    "innerwear_pos": "Hosiery & Underwear sell-in -8.1% ($137.8M) on mass-retail inflation slowdown",
+    "channel_inv_note": "Record $895.6M Q2 sales (+26.9% Activewear; price ~3/4 of growth + 1H restocking); U.S. $796,074k / Can $31,444k / Int'l $68,063k",
+    "source": "Q2 2022 6-K & Call; Q1'23 Call [MEDIUM]",
+    "rep_ar": 460.8,
+    "fac_ar": 111.0,
+    "tot_ar": 571.8,
+    "net_dso": 46.6,
+    "gross_dso": 57.8
+  },
+  {
+    "idx": 23,
+    "qtr": "2022 Q3",
+    "yr": 2022,
+    "end_date": "2022-10-02",
+    "basis": "Product Group",
+    "tot_rev": 850.0,
+    "tot_yoy": 6.0,
+    "act_rev": 742.0,
+    "act_yoy": 13.1,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 742.3,
+    "can_rev": 38.2,
+    "intl_rev": 69.6,
+    "sell_in_rev": 742.0,
+    "sell_in_yoy": 13.1,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": 1.0,
+    "spread_pp": 12.1,
+    "sell_in_plot": 13.1,
+    "pos_plot": 1.0,
+    "spread_plot": 12.1,
+    "ind_pos": "Management declined quantified POS breakdown in Q&A, providing general channel commentary",
+    "gil_pos": "U.S. distributor volume & ring-spun/fleece sell-through positive; Retail and International POS weak",
+    "basic_tee_pos": "Softer than ring-spun/fleece (management declined quantified subcategory POS)",
+    "ringspun_pos": "Positive POS and share gains in U.S. printwear",
+    "fleece_pos": "Strong sell-through and shipments",
+    "innerwear_pos": "Hosiery & Underwear sell-in -25.9% ($108.0M) on retail POS weakness and retailer destocking",
+    "channel_inv_note": "Total unit volume down YoY offset by higher net selling prices; distributor inventory normalized; U.S. $742,291k / Can $38,160k / Int'l $69,557k",
+    "source": "Q3 2022 6-K & Call [MEDIUM]",
+    "rep_ar": 411.5,
+    "fac_ar": 126.0,
+    "tot_ar": 537.5,
+    "net_dso": 43.8,
+    "gross_dso": 57.2
+  },
+  {
+    "idx": 24,
+    "qtr": "2022 Q4",
+    "yr": 2022,
+    "end_date": "2023-01-01",
+    "basis": "Product Group",
+    "tot_rev": 720.0,
+    "tot_yoy": -8.2,
+    "act_rev": 595.4,
+    "act_yoy": -5.1,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 626.6,
+    "can_rev": 22.7,
+    "intl_rev": 70.7,
+    "sell_in_rev": 595.4,
+    "sell_in_yoy": -5.1,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": -4.0,
+    "spread_pp": -1.1,
+    "sell_in_plot": -5.1,
+    "pos_plot": -4.0,
+    "spread_plot": -1.1,
+    "ind_pos": "Q4 printwear POS negative; Retail POS down double digits (NPD men's underwear & hosiery down)",
+    "gil_pos": "Q4 printwear POS negative (current Q1'23 distributor POS running down LSD); Retail POS down double digits",
+    "basic_tee_pos": "Negative (exact % not stated)",
+    "ringspun_pos": "Outperforming open-end basics (exact % not stated)",
+    "fleece_pos": "Current Q1'23 fleece described on Feb'23 call as 'still growing rapidly'",
+    "innerwear_pos": "Retail POS down double digits (citing NPD men's underwear & hosiery declines); H/U sell-in -20.7%",
+    "channel_inv_note": "Retail inventory destocking & slower printwear; Gildan ending inventories hit $1,225.9M; U.S. $626.6M / Can $22.7M / Int'l $70.7M",
+    "source": "Q4 2022 6-K (0001061894-23-000003), FY22 40-F & Call [MEDIUM]",
+    "rep_ar": 248.8,
+    "fac_ar": 229.0,
+    "tot_ar": 477.8,
+    "net_dso": 31.3,
+    "gross_dso": 60.1
+  },
+  {
+    "idx": 25,
+    "qtr": "2023 Q1",
+    "yr": 2023,
+    "end_date": "2023-04-02",
+    "basis": "Product Group",
+    "tot_rev": 702.9,
+    "tot_yoy": -9.3,
+    "act_rev": 587.8,
+    "act_yoy": -11.9,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 625.1,
+    "can_rev": 25.7,
+    "intl_rev": 52.1,
+    "sell_in_rev": 587.8,
+    "sell_in_yoy": -11.9,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": -2.0,
+    "spread_pp": -9.9,
+    "sell_in_plot": -11.9,
+    "pos_plot": -2.0,
+    "spread_plot": -9.9,
+    "ind_pos": "Retail POS down double digits in Q1 (current Q2-to-date retail down HSD); Circana Apr 2023 US discretionary GM -7% $ / -8% units",
+    "gil_pos": "U.S. distributor POS down low-single digits; Fleece POS strong; International POS up mid-single digits; Q1 Retail POS down double digits",
+    "basic_tee_pos": "Negative (exact % not stated)",
+    "ringspun_pos": "Positive share gains in fashion basics",
+    "fleece_pos": "Strong POS sell-through, though distributor sell-in lagged on inventory caution",
+    "innerwear_pos": "Q1 Retail POS down double digits (improving to down HSD in early Q2); H/U sell-in +7.0% on new programs",
+    "channel_inv_note": "Activewear sell-in -11.9% as cycling 1H22 restocking & cautious fleece ordering; U.S. $625,056k / Can $25,671k / Int'l $52,136k",
+    "source": "Q1 2023 6-K & Call p. 6; Circana May 16, 2023 Release [MEDIUM]",
+    "rep_ar": 399.1,
+    "fac_ar": 218.0,
+    "tot_ar": 617.1,
+    "net_dso": 51.4,
+    "gross_dso": 79.5
+  },
+  {
+    "idx": 26,
+    "qtr": "2023 Q2",
+    "yr": 2023,
+    "end_date": "2023-07-02",
+    "basis": "Product Group",
+    "tot_rev": 840.4,
+    "tot_yoy": -6.2,
+    "act_rev": 691.7,
+    "act_yoy": -8.7,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 745.9,
+    "can_rev": 28.1,
+    "intl_rev": 66.4,
+    "sell_in_rev": 691.7,
+    "sell_in_yoy": -8.7,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": 2.0,
+    "spread_pp": -10.7,
+    "sell_in_plot": -8.7,
+    "pos_plot": 2.0,
+    "spread_plot": -10.7,
+    "ind_pos": "Not separately quantified from company POS on Q2'23 call",
+    "gil_pos": "North American Activewear POS positive YoY; Underwear & Hosiery POS flat; International POS softened",
+    "basic_tee_pos": "Soft / negative on customer trade-down & macro caution",
+    "ringspun_pos": "Positive YoY",
+    "fleece_pos": "Up mid-single digits ('not as strong as it was ... still in mid-single-digit type growth' \u2014 Q2'23 Call p. 5)",
+    "innerwear_pos": "Flat overall POS in underwear & hosiery (+7.9% H/U sell-in on new mass programs)",
+    "channel_inv_note": "Activewear sell-in -8.7% vs. positive NA POS due to cycling Q2'22 distributor restocking; U.S. $745,907k / Can $28,110k / Int'l $66,421k",
+    "source": "Q2 2023 6-K & Call p. 5 [MEDIUM]",
+    "rep_ar": 525.2,
+    "fac_ar": 213.0,
+    "tot_ar": 738.2,
+    "net_dso": 56.6,
+    "gross_dso": 79.5
+  },
+  {
+    "idx": 27,
+    "qtr": "2023 Q3",
+    "yr": 2023,
+    "end_date": "2023-10-01",
+    "basis": "Product Group",
+    "tot_rev": 869.9,
+    "tot_yoy": 2.3,
+    "act_rev": 744.4,
+    "act_yoy": 0.3,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 787.7,
+    "can_rev": 28.9,
+    "intl_rev": 53.3,
+    "sell_in_rev": 744.4,
+    "sell_in_yoy": 0.3,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": 5.0,
+    "spread_pp": -4.7,
+    "sell_in_plot": 0.3,
+    "pos_plot": 5.0,
+    "spread_plot": -4.7,
+    "ind_pos": "Overall market POS, particularly distributor channel, was 'probably down double digits' (Glenn Chamandy, Q3'23 Call p. 6); Circana Jan\u2013Oct 2023 US activewear $ +32% vs. 2019",
+    "gil_pos": "Up mid-single digits in U.S. Activewear (driven by double-digit fleece & ring-spun); Underwear & Hosiery POS positive; Europe +LSD; Asia -HSD/-LDD",
+    "basic_tee_pos": "Softer than ring-spun/fleece (exact % not stated)",
+    "ringspun_pos": "Up double digits (Q3'23 Call p. 6)",
+    "fleece_pos": "Up double digits ('driven by both double-digit sell-through trends and seasonal replenishment' \u2014 Q3'23 Call p. 6)",
+    "innerwear_pos": "Positive POS & +16.2% H/U sell-in on mass-retail underwear expansion",
+    "channel_inv_note": "Activewear sell-in +0.3% vs. +MSD company POS (Europe destocking); U.S. $787,686k / Can $28,948k / Int'l $53,267k",
+    "source": "Q3 2023 6-K & Call p. 6; Texworld/Circana [MEDIUM]",
+    "rep_ar": 449.4,
+    "fac_ar": 238.0,
+    "tot_ar": 687.4,
+    "net_dso": 46.8,
+    "gross_dso": 71.5
+  },
+  {
+    "idx": 28,
+    "qtr": "2023 Q4",
+    "yr": 2023,
+    "end_date": "2023-12-31",
+    "basis": "Product Group",
+    "tot_rev": 782.7,
+    "tot_yoy": 8.7,
+    "act_rev": 644.0,
+    "act_yoy": 8.1,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 699.5,
+    "can_rev": 29.7,
+    "intl_rev": 53.5,
+    "sell_in_rev": 644.0,
+    "sell_in_yoy": 8.1,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": 5.0,
+    "spread_pp": 3.1,
+    "sell_in_plot": 8.1,
+    "pos_plot": 5.0,
+    "spread_plot": 3.1,
+    "ind_pos": "Not separately quantified from company POS on Q4'23 call",
+    "gil_pos": "Positive POS across all 3 Activewear subcategories (Basics +LSD, Ring-Spun +DD, Fleece +DD) & positive Underwear/Hosiery POS",
+    "basic_tee_pos": "Up low-single digits ('good positive POS from the basics as well, up low single digits' \u2014 Chuck Ward)",
+    "ringspun_pos": "Up double digits in Q4 (Chuck Ward)",
+    "fleece_pos": "Up double digits in Q4 (Chuck Ward)",
+    "innerwear_pos": "Positive POS; Hosiery & Underwear sell-in $138.7M (+11.4% YoY)",
+    "channel_inv_note": "'Shipped in line with POS in Q4' (+8.1% Activewear sell-in to $644.0M); U.S. $699.5M / Can $29.7M / Int'l $53.5M",
+    "source": "Q4 2023 6-K (0001061894-24-000008), FY23 40-F & Call [MEDIUM]",
+    "rep_ar": 412.5,
+    "fac_ar": 271.0,
+    "tot_ar": 683.5,
+    "net_dso": 47.7,
+    "gross_dso": 79.0
+  },
+  {
+    "idx": 29,
+    "qtr": "2024 Q1",
+    "yr": 2024,
+    "end_date": "2024-03-31",
+    "basis": "Product Group",
+    "tot_rev": 695.8,
+    "tot_yoy": -1.0,
+    "act_rev": 592.1,
+    "act_yoy": 0.7,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 618.0,
+    "can_rev": 25.3,
+    "intl_rev": 52.5,
+    "sell_in_rev": 592.1,
+    "sell_in_yoy": 0.7,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": 3.5,
+    "spread_pp": -2.8,
+    "sell_in_plot": 0.7,
+    "pos_plot": 3.5,
+    "spread_plot": -2.8,
+    "ind_pos": "Industry printwear & broader underwear market POS down mid-to-high single digits",
+    "gil_pos": "Up high-low-single digits in Activewear ('very positive POS pretty well across the board ... in all categories'; NA + & Int'l +MSD)",
+    "basic_tee_pos": "Positive ('very positive POS pretty well across the board ... in all categories' \u2014 Q1'24 Call)",
+    "ringspun_pos": "Up double digits (Chuck Ward)",
+    "fleece_pos": "Up high-single digits (Chuck Ward)",
+    "innerwear_pos": "Broader underwear market POS down MSD\u2013HSD; Gildan H/U sell-in -9.9% on Under Armour sock phase-out",
+    "channel_inv_note": "Activewear sell-in +0.7% (high-side LSD volume/POS offset by price/mix); U.S. $618.0M / Can $25.3M / Int'l $52.5M",
+    "source": "Q1 2024 6-K & Call [MEDIUM]",
+    "rep_ar": 512.1,
+    "fac_ar": 208.0,
+    "tot_ar": 720.1,
+    "net_dso": 66.6,
+    "gross_dso": 93.7
+  },
+  {
+    "idx": 30,
+    "qtr": "2024 Q2",
+    "yr": 2024,
+    "end_date": "2024-06-30",
+    "basis": "Product Group",
+    "tot_rev": 862.2,
+    "tot_yoy": 2.6,
+    "act_rev": 736.5,
+    "act_yoy": 6.5,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 763.8,
+    "can_rev": 27.5,
+    "intl_rev": 70.9,
+    "sell_in_rev": 736.5,
+    "sell_in_yoy": 6.5,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": 3.5,
+    "spread_pp": 3.0,
+    "sell_in_plot": 6.5,
+    "pos_plot": 3.5,
+    "spread_plot": 3.0,
+    "ind_pos": "Overall wholesale market POS down probably around mid-single digits",
+    "gil_pos": "Positive YoY (improving through quarter; June +4% POS in a down market; International POS up high-single digits)",
+    "basic_tee_pos": "Positive ('positive POS on basics in Q2' / 'up slightly' per Q2 & Q4 calls on Soft Cotton Tech)",
+    "ringspun_pos": "Positive share gains (Comfort Colors very strong; exact category % not stated)",
+    "fleece_pos": "Positive share gains & higher North American distributor fleece replenishment",
+    "innerwear_pos": "Hosiery & Underwear sell-in -15.5% ($125.6M) due to Under Armour sock exit",
+    "channel_inv_note": "Activewear sell-in +6.5% ($736.5M) on positive POS + NA fleece replenishment; Delta Apparel Ch. 11; U.S. $763.8M / Can $27.5M / Int'l $70.9M",
+    "source": "Q2 2024 6-K & Call; Q4'24 Call [MEDIUM]",
+    "rep_ar": 599.0,
+    "fac_ar": 222.0,
+    "tot_ar": 821.0,
+    "net_dso": 62.9,
+    "gross_dso": 86.2
+  },
+  {
+    "idx": 31,
+    "qtr": "2024 Q3",
+    "yr": 2024,
+    "end_date": "2024-09-29",
+    "basis": "Product Group",
+    "tot_rev": 891.1,
+    "tot_yoy": 2.4,
+    "act_rev": 788.3,
+    "act_yoy": 5.9,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 798.8,
+    "can_rev": 28.2,
+    "intl_rev": 64.1,
+    "sell_in_rev": 788.3,
+    "sell_in_yoy": 5.9,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": 3.5,
+    "spread_pp": 2.4,
+    "sell_in_plot": 5.9,
+    "pos_plot": 3.5,
+    "spread_plot": 2.4,
+    "ind_pos": "Not finalized from primary transcript (cached Q3'24 transcript file is a Cloudflare block page)",
+    "gil_pos": "Positive North American channel POS (Q3 MD&A); International sales +20% YoY",
+    "basic_tee_pos": "Up slightly ('Q2 ... up slightly. Q3 ... up slightly' \u2014 retrospective confirmation on Q4'24 Call)",
+    "ringspun_pos": "Positive response to new innovation (exact % unverified due to blocked Q3 transcript)",
+    "fleece_pos": "Positive sell-through & distributor replenishment (17% unit share lead unverified from blocked Q3 transcript)",
+    "innerwear_pos": "H/U sell-in -18.1% ($102.8M; ex-Under Armour, H/U up low-double digits and consolidated sales up HSD)",
+    "channel_inv_note": "Activewear sell-in +5.9% (+$44M to $788.3M); U.S. $798.8M / Can $28.2M / Int'l $64.1M",
+    "source": "Q3 2024 6-K MD&A & Q4'24 Call [MEDIUM]",
+    "rep_ar": 612.9,
+    "fac_ar": 232.0,
+    "tot_ar": 844.9,
+    "net_dso": 62.2,
+    "gross_dso": 85.8
+  },
+  {
+    "idx": 32,
+    "qtr": "2024 Q4",
+    "yr": 2024,
+    "end_date": "2024-12-29",
+    "basis": "Product Group",
+    "tot_rev": 821.5,
+    "tot_yoy": 5.0,
+    "act_rev": 714.1,
+    "act_yoy": 10.9,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": null,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": null,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": null,
+    "pf_ret_yoy": null,
+    "us_rev": 730.6,
+    "can_rev": 26.5,
+    "intl_rev": 64.4,
+    "sell_in_rev": 714.1,
+    "sell_in_yoy": 10.9,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": 7.0,
+    "spread_pp": 3.9,
+    "sell_in_plot": 10.9,
+    "pos_plot": 7.0,
+    "spread_plot": 3.9,
+    "ind_pos": "Circana/CNBC macro: 2024 total U.S. retail apparel sales $240.6B (-2% YoY); Circana NACDS 12ME Sep 2024 apparel $242B (-2.4%)",
+    "gil_pos": "Positive POS across channels; International POS up mid-single digits (Europe POS up high-single digits; International sales +20%)",
+    "basic_tee_pos": "Up DOUBLE DIGITS ('double-digit POS growth in the fourth quarter of 2024' \u2014 Glenn Chamandy & Chuck Ward)",
+    "ringspun_pos": "Up DOUBLE DIGITS (Comfort Colors up 40% per Chuck Ward)",
+    "fleece_pos": "Positive POS & Q4 shipment growth",
+    "innerwear_pos": "H/U sell-in -22.6% ($107.4M) on UA exit; ex-UA total company sales up low-double digits",
+    "channel_inv_note": "Activewear sell-in +10.9% ($714.1M); International sales +20% for 2nd straight quarter; U.S. $730.6M / Can $26.5M / Int'l $64.4M",
+    "source": "Q4 2024 6-K, FY24 40-F & Call; Circana NACDS [MEDIUM]",
+    "rep_ar": 542.4,
+    "fac_ar": 272.0,
+    "tot_ar": 814.4,
+    "net_dso": 59.7,
+    "gross_dso": 89.7
+  },
+  {
+    "idx": 33,
+    "qtr": "2025 Q1",
+    "yr": 2025,
+    "end_date": "2025-03-30",
+    "basis": "Product Group + 2026 Recast/PF",
+    "tot_rev": 711.7,
+    "tot_yoy": 2.3,
+    "act_rev": 647.4,
+    "act_yoy": 9.3,
+    "whsl_rev": 626.4,
+    "whsl_yoy": null,
+    "pf_tot_rev": 1293.5,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": 651.1,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": 642.4,
+    "pf_ret_yoy": null,
+    "us_rev": 632.6,
+    "can_rev": 27.9,
+    "intl_rev": 51.2,
+    "sell_in_rev": 647.4,
+    "sell_in_yoy": 9.3,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": 2.5,
+    "spread_pp": 6.8,
+    "sell_in_plot": 9.3,
+    "pos_plot": 2.5,
+    "spread_plot": 6.8,
+    "ind_pos": "Market POS down low-to-mid single digits (slow Jan weather/LA fires, improving in late Feb/Mar & into Apr)",
+    "gil_pos": "Gained market share; higher Activewear volumes and favorable fleece/ring-spun mix",
+    "basic_tee_pos": "Not separately quantified on Q1'25 call",
+    "ringspun_pos": "Comfort Colors & American Apparel sales up double digits",
+    "fleece_pos": "Favorable fleece mix (standalone POS % not stated)",
+    "innerwear_pos": "Innerwear sell-in -38.0% ($64.3M; Recast Retail $85.3M) on market softness & UA exit",
+    "channel_inv_note": "Activewear +9.3% ($647.4M; Recast Wholesale $626.4M) driven by volume & innovation/new programs (no real price movement)",
+    "source": "Q1 2025 6-K & Call; Q1 2026 6-K Recast & PF Tables [HIGH/MEDIUM]",
+    "rep_ar": 662.1,
+    "fac_ar": 223.0,
+    "tot_ar": 885.1,
+    "net_dso": 84.2,
+    "gross_dso": 112.6
+  },
+  {
+    "idx": 34,
+    "qtr": "2025 Q2",
+    "yr": 2025,
+    "end_date": "2025-06-29",
+    "basis": "Product Group + 2026 Recast/PF",
+    "tot_rev": 918.5,
+    "tot_yoy": 6.5,
+    "act_rev": 822.2,
+    "act_yoy": 11.6,
+    "whsl_rev": 781.4,
+    "whsl_yoy": null,
+    "pf_tot_rev": 1717.6,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": 816.7,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": 900.9,
+    "pf_ret_yoy": null,
+    "us_rev": 825.6,
+    "can_rev": 32.0,
+    "intl_rev": 60.9,
+    "sell_in_rev": 822.2,
+    "sell_in_yoy": 11.6,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": 3.5,
+    "spread_pp": 8.1,
+    "sell_in_plot": 11.6,
+    "pos_plot": 3.5,
+    "spread_plot": 8.1,
+    "ind_pos": "Wholesale market POS down low-single digits",
+    "gil_pos": "Strong North American Activewear POS driven by GLB, retail, and large screen-printers",
+    "basic_tee_pos": "Soft Cotton Technology continuing to perform well (standalone POS % not stated)",
+    "ringspun_pos": "'Comfort Colors is on fire; American Apparel gaining a lot of traction'; launched AllPro",
+    "fleece_pos": "New Champion license & large national-account fleece program for 2H (program sell-in context)",
+    "innerwear_pos": "Aug 2025 Form 425 Slide 8 (Circana RTS 12ME June 2025) ranks Hanes #1 U.S. Innerwear / #1 Men's Underwear brand",
+    "channel_inv_note": "Activewear +11.6% ($822.2M; Recast Wholesale $781.4M), aided by small tailwind from orders ahead of announced pricing actions",
+    "source": "Q2 2025 6-K & Call; Form 425 Slide 8; Q2 2026 6-K [HIGH/MEDIUM]",
+    "rep_ar": 708.0,
+    "fac_ar": 297.0,
+    "tot_ar": 1005.0,
+    "net_dso": 69.8,
+    "gross_dso": 99.0
+  },
+  {
+    "idx": 35,
+    "qtr": "2025 Q3",
+    "yr": 2025,
+    "end_date": "2025-09-28",
+    "basis": "Product Group + 2026 Recast/PF",
+    "tot_rev": 910.6,
+    "tot_yoy": 2.2,
+    "act_rev": 830.6,
+    "act_yoy": 5.4,
+    "whsl_rev": 788.5,
+    "whsl_yoy": null,
+    "pf_tot_rev": 1610.2,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": 823.4,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": 786.8,
+    "pf_ret_yoy": null,
+    "us_rev": 819.5,
+    "can_rev": 30.8,
+    "intl_rev": 60.3,
+    "sell_in_rev": 830.6,
+    "sell_in_yoy": 5.4,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": 3.0,
+    "spread_pp": 2.4,
+    "sell_in_plot": 5.4,
+    "pos_plot": 3.0,
+    "spread_plot": 2.4,
+    "ind_pos": "Stable vs. Q2 (down low-single digits)",
+    "gil_pos": "Positive Activewear share gains; Comfort Colors fastest-growing brand with double-digit sales growth",
+    "basic_tee_pos": "Not separately quantified on Q3'25 call",
+    "ringspun_pos": "Comfort Colors grew double digits",
+    "fleece_pos": "'Fleece has performed well'",
+    "innerwear_pos": "Retailers managing innerwear inventory tightly due to tariff costs in inventory & floor-set delays (-22.1% H/U sell-in)",
+    "channel_inv_note": "Activewear +5.4% ($830.6M; Recast Wholesale $788.5M) aided by customer pre-buying ahead of announced price increases (per Q3'26 6-K)",
+    "source": "Q3 2025 6-K & Call; Q3 2026 6-K [HIGH/MEDIUM]",
+    "rep_ar": 723.9,
+    "fac_ar": 310.0,
+    "tot_ar": 1033.9,
+    "net_dso": 71.9,
+    "gross_dso": 102.8
+  },
+  {
+    "idx": 36,
+    "qtr": "2025 Q4",
+    "yr": 2025,
+    "end_date": "2025-12-28",
+    "basis": "Product Group + PF (HBI Closed Dec 1)",
+    "tot_rev": 1078.5,
+    "tot_yoy": 31.3,
+    "act_rev": 787.8,
+    "act_yoy": 10.3,
+    "whsl_rev": null,
+    "whsl_yoy": null,
+    "pf_tot_rev": 1467.8,
+    "pf_tot_yoy": null,
+    "pf_whsl_rev": 733.7,
+    "pf_whsl_yoy": null,
+    "pf_ret_rev": 734.1,
+    "pf_ret_yoy": null,
+    "us_rev": 976.6,
+    "can_rev": 34.2,
+    "intl_rev": 67.7,
+    "sell_in_rev": 787.8,
+    "sell_in_yoy": 10.3,
+    "sell_in_basis": "Reported Activewear Product Group YoY %",
+    "pos_yoy": 1.0,
+    "spread_pp": 9.3,
+    "sell_in_plot": 10.3,
+    "pos_plot": 1.0,
+    "spread_plot": 9.3,
+    "ind_pos": "Market 'okay in Q4 ... from a dollar perspective. The units were down slightly' (CFO on Q4'25 call)",
+    "gil_pos": "Higher-value Comfort Colors, Champion & ALLPRO grew and took share (quote 'don't see any negative impact from POS' was forward-looking re: 2026 inv reduction)",
+    "basic_tee_pos": "Not separately quantified on Q4'25 call",
+    "ringspun_pos": "Comfort Colors, Champion & ALLPRO grew and took share (Comfort Colors +40% full-year remark)",
+    "fleece_pos": "Positive Q4 fleece shipments",
+    "innerwear_pos": "HanesBrands closed Dec 1, 2025 (~1 month consolidated in Q4 reported: $216.7M Hanes contribution; Legacy Gildan Q4 = $861.7M)",
+    "channel_inv_note": "Reported Total $1,078.5M (Legacy Gildan ex-Hanes $861.7M); U.S. $976.6M / Can $34.2M / Int'l $67.7M; year-end factored A/R = $777M",
+    "source": "Q4 2025 6-K, FY25 40-F & Call; Q1 2026 PR PF Bridge [HIGH/MEDIUM]",
+    "rep_ar": 955.7,
+    "fac_ar": 777.0,
+    "tot_ar": 1732.7,
+    "net_dso": 80.2,
+    "gross_dso": 145.4
+  },
+  {
+    "idx": 37,
+    "qtr": "2026 Q1",
+    "yr": 2026,
+    "end_date": "2026-03-29",
+    "basis": "Wholesale / Retail Channel",
+    "tot_rev": 1166.0,
+    "tot_yoy": 63.8,
+    "act_rev": null,
+    "act_yoy": null,
+    "whsl_rev": 552.1,
+    "whsl_yoy": -11.9,
+    "pf_tot_rev": 1166.0,
+    "pf_tot_yoy": -9.9,
+    "pf_whsl_rev": 552.1,
+    "pf_whsl_yoy": -15.2,
+    "pf_ret_rev": 613.9,
+    "pf_ret_yoy": -4.4,
+    "us_rev": 1069.1,
+    "can_rev": 25.0,
+    "intl_rev": 71.9,
+    "sell_in_rev": 552.1,
+    "sell_in_yoy": -15.2,
+    "sell_in_basis": "Pro Forma Wholesale YoY % (incl. HBI in 2025 & 2026)",
+    "pos_yoy": 2.0,
+    "spread_pp": -17.2,
+    "sell_in_plot": -15.2,
+    "pos_plot": 2.0,
+    "spread_plot": -17.2,
+    "ind_pos": "Wholesale market POS down low-single digits (in dollars); Retail market POS flattish",
+    "gil_pos": "Gildan Wholesale POS UP low-single digits (in dollars, aided by Comfort Colors mix shift vs. 5000); Gildan Retail POS UP low-single digits",
+    "basic_tee_pos": "Not separately quantified (Glenn noted positive aggregate POS dollars reflected mix shift toward higher-priced Comfort Colors vs. 5000)",
+    "ringspun_pos": "Positive Comfort Colors growth",
+    "fleece_pos": "Positive fleece growth",
+    "innerwear_pos": "Underwear performing 'exceptionally well' across men's, women's & kids (+LSD vs. flattish market); softness in intimates & socks",
+    "channel_inv_note": "Proactive customer channel inventory reduction cut Wholesale sell-in -15.2% PF (-$99.0M vs. $651.1M Q1'25 PF; -11.9% vs. $626.4M recast)",
+    "source": "Q1 2026 6-K (Apr 30, 2026) & Call p. 8, 16 [HIGH/MEDIUM]",
+    "rep_ar": 1009.7,
+    "fac_ar": 667.3,
+    "tot_ar": 1677.0,
+    "net_dso": 78.4,
+    "gross_dso": 130.1
+  },
+  {
+    "idx": 38,
+    "qtr": "2026 Q2",
+    "yr": 2026,
+    "end_date": "2026-06-28",
+    "basis": "Wholesale / Retail Channel",
+    "tot_rev": 1582.5,
+    "tot_yoy": 72.3,
+    "act_rev": null,
+    "act_yoy": null,
+    "whsl_rev": 769.4,
+    "whsl_yoy": -1.5,
+    "pf_tot_rev": 1582.5,
+    "pf_tot_yoy": -7.9,
+    "pf_whsl_rev": 769.4,
+    "pf_whsl_yoy": -5.8,
+    "pf_ret_rev": 813.1,
+    "pf_ret_yoy": -9.7,
+    "us_rev": 1438.6,
+    "can_rev": 42.9,
+    "intl_rev": 101.0,
+    "sell_in_rev": 769.4,
+    "sell_in_yoy": -5.8,
+    "sell_in_basis": "Pro Forma Wholesale YoY % (incl. HBI in 2025 & 2026)",
+    "pos_yoy": 3.0,
+    "spread_pp": -8.8,
+    "sell_in_plot": -5.8,
+    "pos_plot": 3.0,
+    "spread_plot": -8.8,
+    "ind_pos": "Wholesale market POS continued to be down low-single digits (improving in June); Retail market weakened in June; Circana Q3 kids apparel forecast -1% to -2% $ / -3% units",
+    "gil_pos": "Gildan Wholesale POS UP at the upper end of low-single digits (pulled up by double-digit growth in Comfort Colors, AA & Champion)",
+    "basic_tee_pos": "Relative outperformance of down-LSD market ('our basics business is performing well, too and better -- slightly better than market' \u2014 Chuck Ward, p. 16)",
+    "ringspun_pos": "'Our ring-spun category, our soft style move well as well ... performing above market'; Comfort Colors, AA & Champion grew double digits",
+    "fleece_pos": "Gaining fleece share; shifted some fleece sell-in from Q2 to Q4 closer to season",
+    "innerwear_pos": "Continued market share gains in underwear despite June retail market weakness",
+    "channel_inv_note": "Completed proactive channel inventory reduction in Q2 (Wholesale sell-in -5.8% PF vs. $816.7M; -1.5% vs. $781.4M recast)",
+    "source": "Q2 2026 6-K (Jul 30, 2026) & Call p. 12\u201316 [HIGH/MEDIUM]",
+    "rep_ar": 1076.4,
+    "fac_ar": 871.5,
+    "tot_ar": 1947.9,
+    "net_dso": 61.6,
+    "gross_dso": 111.4
+  },
+  {
+    "idx": 39,
+    "qtr": "2026 Q3",
+    "yr": 2026,
+    "end_date": "2026-09-27",
+    "basis": "Wholesale / Retail Channel",
+    "tot_rev": 1466.7,
+    "tot_yoy": 61.1,
+    "act_rev": null,
+    "act_yoy": null,
+    "whsl_rev": 734.8,
+    "whsl_yoy": -6.8,
+    "pf_tot_rev": 1466.7,
+    "pf_tot_yoy": -8.9,
+    "pf_whsl_rev": 734.8,
+    "pf_whsl_yoy": -10.8,
+    "pf_ret_rev": 731.9,
+    "pf_ret_yoy": -7.0,
+    "us_rev": 1329.3,
+    "can_rev": 36.7,
+    "intl_rev": 100.7,
+    "sell_in_rev": 734.8,
+    "sell_in_yoy": -10.8,
+    "sell_in_basis": "Pro Forma Wholesale YoY % (incl. HBI in 2025 & 2026)",
+    "pos_yoy": -5.0,
+    "spread_pp": -5.8,
+    "sell_in_plot": -10.8,
+    "pos_plot": -5.0,
+    "spread_plot": -5.8,
+    "ind_pos": "Wholesale market POS down mid-single digits in Q3 (good June, softened in July, decelerated in Aug\u2013Sep; Oct similar); September fleece POS down mid-to-high teens on warm weather; Circana Q3 US footwear 0% $ / -MSD units (Beth Goldstein)",
+    "gil_pos": "Company-specific Q3 aggregate POS rate not separately disclosed from market (-MSD); Chuck Ward noted channel was down mid-single digits 'impacted by fleece, and then outside of fleece was spread across all categories'; Luca Barile declined John Zamparo's request for monthly POS & POS by category",
+    "basic_tee_pos": "Not separately disclosed ('outside of fleece [softness] was spread across all categories' on Nov. 5 call vs. CEO's Nov. 6 private unverified claim of '-15% U.S. T-shirt sales')",
+    "ringspun_pos": "Comfort Colors, American Apparel & Champion 'continued to perform well with our customers' (Q3 6-K PR)",
+    "fleece_pos": "September fleece POS down mid-to-high teens on warm weather (largest category driver of Q3 POS drop)",
+    "innerwear_pos": "Retail pro forma sales -7.0% (softer demand + ~$60M Q3 product availability/service constraints, primarily in Retail)",
+    "channel_inv_note": "Q3 shortfall included ~$100M demand softness/unfavorable mix (primarily Wholesale) + ~$60M service constraints (primarily Retail); Managed A/R = $1,880.8M ($1,004.9M net trade A/R + $875.9M sold A/R in Note 5 = 116.7d DSO)",
+    "source": "Q3 2026 6-K (Nov 5, 2026) Note 5 & 12, PR & Call [HIGH/MEDIUM]",
+    "rep_ar": 1004.9,
+    "fac_ar": 875.9,
+    "tot_ar": 1880.8,
+    "net_dso": 62.4,
+    "gross_dso": 116.7
+  },
+  {
+    "idx": 40,
+    "qtr": "2026 Q4E",
+    "yr": 2026,
+    "end_date": "2027-01-03",
+    "basis": "Guidance Implied Total / Modeled Split",
+    "tot_rev": 1234.8,
+    "tot_yoy": 14.5,
+    "act_rev": null,
+    "act_yoy": null,
+    "whsl_rev": 605.0,
+    "whsl_yoy": null,
+    "pf_tot_rev": 1234.8,
+    "pf_tot_yoy": -15.9,
+    "pf_whsl_rev": 605.0,
+    "pf_whsl_yoy": -17.5,
+    "pf_ret_rev": 629.8,
+    "pf_ret_yoy": -14.2,
+    "us_rev": 1115.0,
+    "can_rev": 32.0,
+    "intl_rev": 87.8,
+    "sell_in_rev": 605.0,
+    "sell_in_yoy": -17.5,
+    "sell_in_basis": "Pro Forma Wholesale YoY % (incl. HBI in 2025 & 2026)",
+    "pos_yoy": -5.0,
+    "spread_pp": -12.5,
+    "sell_in_plot": -17.5,
+    "pos_plot": -5.0,
+    "spread_plot": -12.5,
+    "ind_pos": "Market POS projected down mid-single digits in Q4 (vs. prior guidance of flat to down low-single digit)",
+    "gil_pos": "Company-specific Q4 POS not separately guided from market (-MSD); Q4 lower customer replenishment is -$145M total (-$45M Wholesale / -$100M Retail)",
+    "basic_tee_pos": "Unresolved comparability/scope question between Nov. 5 market -MSD guide and Nov. 6 private '-15%' statement [LOW]",
+    "ringspun_pos": "Comfort Colors, AA & Champion expected to continue outperforming basic tees [UNVERIFIED \u2014 model]",
+    "fleece_pos": "Weather-dependent Q4 fleece reorder season after September mid-to-high-teens drop",
+    "innerwear_pos": "Hit by -$100M Q4 Retail lower replenishment + remainder (~$15M) of ~$75M FY service constraints (primarily Retail)",
+    "channel_inv_note": "Implied Q4 total sales $1,184.8M\u2013$1,284.8M (mid $1,234.8M: +14.5% vs. $1,078.5M Q4'25 rep; +43.3% vs. $861.7M legacy Gildan; -15.9% vs. $1,467.8M PF); Q4 replenishment cut = -$45M Whsl / -$100M Retail",
+    "source": "Q3 2026 6-K Guidance (Nov 5, 2026) & Call [HIGH/MEDIUM \u2014 channel split modeled]",
+    "rep_ar": null,
+    "fac_ar": null,
+    "tot_ar": null,
+    "net_dso": null,
+    "gross_dso": null
+  }
+];
+let currentWindow = 'all';
+let isCapped = true;
+let selectedIdx = 38; // Default to 2026 Q3 (index 38)
+let chartInstance = null;
+
+function getFilteredData() {
+  if (currentWindow === 'post2022') return RAW_DATA.slice(20);
+  if (currentWindow === '2024_2026') return RAW_DATA.slice(28);
+  return RAW_DATA;
+}
+
+function fmtPct(v) {
+  if (v === null || v === undefined) return 'N/A';
+  return (v >= 0 ? '+' : '') + v.toFixed(1) + '%';
+}
+
+function fmtPP(v) {
+  if (v === null || v === undefined) return 'N/A';
+  return (v >= 0 ? '+' : '') + v.toFixed(1) + ' pp';
+}
+
+function selectQuarterByGlobalIndex(gIdx) {
+  if (gIdx < 0 || gIdx >= RAW_DATA.length) return;
+  selectedIdx = gIdx;
+  const r = RAW_DATA[gIdx];
+  document.getElementById('d-qtr').textContent = r.qtr + (r.qtr === '2026 Q4E' ? ' (Guidance Implied)' : '');
+  document.getElementById('d-date').textContent = `Period Ended: ${r.end_date} | Reporting Basis: ${r.basis}`;
+
+  const elSell = document.getElementById('d-sellin');
+  elSell.textContent = fmtPct(r.sell_in_yoy);
+  elSell.className = 'kpi-val ' + (r.sell_in_yoy >= 0 ? 'pos-val' : 'neg-val');
+  document.getElementById('d-sellin-note').textContent = r.sell_in_basis;
+
+  const elPos = document.getElementById('d-pos');
+  elPos.textContent = fmtPct(r.pos_yoy);
+  elPos.className = 'kpi-val ' + (r.pos_yoy === null ? 'neutral-val' : (r.pos_yoy >= 0 ? 'pos-val' : 'neg-val'));
+
+  const elSp = document.getElementById('d-spread');
+  elSp.textContent = fmtPP(r.spread_pp);
+  elSp.className = 'kpi-val ' + (r.spread_pp === null ? 'neutral-val' : (r.spread_pp >= 0 ? 'pos-val' : 'neg-val'));
+  document.getElementById('d-spread-note').textContent = r.spread_pp === null
+    ? 'No quantified wholesale POS in filing archive'
+    : (r.spread_pp >= 0 ? 'Positive (+pp): Sell-In > POS (Restock / Share / Terms)' : 'Negative (-pp): Sell-In < POS (Channel Destocking)');
+
+  document.getElementById('d-ind-pos').textContent = r.ind_pos;
+  document.getElementById('d-gil-pos').textContent = r.gil_pos;
+  document.getElementById('d-basic').textContent = r.basic_tee_pos;
+  document.getElementById('d-ringspun').textContent = r.ringspun_pos;
+  document.getElementById('d-fleece').textContent = r.fleece_pos;
+  document.getElementById('d-innerwear').textContent = r.innerwear_pos;
+
+  let revParts = [`Reported Total: $${r.tot_rev.toFixed(1)}M (${fmtPct(r.tot_yoy)})`];
+  if (r.act_rev !== null) revParts.push(`Activewear: $${r.act_rev.toFixed(1)}M (${fmtPct(r.act_yoy)})`);
+  if (r.whsl_rev !== null) revParts.push(`Recast Wholesale: $${r.whsl_rev.toFixed(1)}M (${fmtPct(r.whsl_yoy)})`);
+  if (r.pf_tot_rev !== null) revParts.push(`Pro Forma Total (incl. HBI): $${r.pf_tot_rev.toFixed(1)}M (${fmtPct(r.pf_tot_yoy)})`);
+  if (r.pf_whsl_rev !== null) revParts.push(`Pro Forma Wholesale (incl. HBI): $${r.pf_whsl_rev.toFixed(1)}M (${fmtPct(r.pf_whsl_yoy)})`);
+  revParts.push(`Geo (US / Can / Int'l): $${r.us_rev.toFixed(1)}M / $${r.can_rev.toFixed(1)}M / $${r.intl_rev.toFixed(1)}M`);
+  document.getElementById('d-rev-summary').textContent = revParts.join(' | ');
+
+  if (r.gross_dso !== null && r.gross_dso !== undefined) {
+    document.getElementById('d-dso-summary').textContent =
+      `Gross Economic DSO: ${r.gross_dso.toFixed(1)} days | Net On-B/S DSO: ${r.net_dso.toFixed(1)} days | Total Managed AR: $${r.tot_ar.toFixed(1)}M ($${r.rep_ar.toFixed(1)}M Net Trade AR + $${r.fac_ar.toFixed(1)}M Off-B/S Factored AR)`;
+  } else {
+    document.getElementById('d-dso-summary').textContent = 'Pre-2021 quarterly factoring pool not tracked in Oakcliff DSO workpaper.';
+  }
+
+  document.getElementById('d-inv-note').textContent = r.channel_inv_note;
+  document.getElementById('d-source').textContent = r.source;
+
+  renderPills();
+}
+
+function stepQuarter(delta) {
+  let next = selectedIdx + delta;
+  if (next < 0) next = 0;
+  if (next >= RAW_DATA.length) next = RAW_DATA.length - 1;
+  selectQuarterByGlobalIndex(next);
+}
+
+function renderPills() {
+  const container = document.getElementById('pillContainer');
+  container.innerHTML = '';
+  RAW_DATA.forEach((r, idx) => {
+    const btn = document.createElement('button');
+    let cls = 'q-pill';
+    if (idx === selectedIdx) cls += ' active';
+    if (r.spread_pp !== null) cls += (r.spread_pp >= 0 ? ' spread-pos' : ' spread-neg');
+    btn.className = cls;
+    btn.textContent = r.qtr.replace('20', "'");
+    btn.onclick = () => selectQuarterByGlobalIndex(idx);
+    container.appendChild(btn);
+  });
+}
+
+function renderChart() {
+  const dataSlice = getFilteredData();
+  const labels = dataSlice.map(r => r.qtr);
+  const sellInSeries = dataSlice.map(r => isCapped ? r.sell_in_plot : r.sell_in_yoy);
+  const posSeries = dataSlice.map(r => isCapped ? r.pos_plot : r.pos_yoy);
+  const spreadSeries = dataSlice.map(r => isCapped ? r.spread_plot : r.spread_pp);
+  const barColors = dataSlice.map(r => (r.spread_pp !== null && r.spread_pp >= 0) ? 'rgba(16, 185, 129, 0.45)' : 'rgba(239, 68, 68, 0.45)');
+  const barBorders = dataSlice.map(r => (r.spread_pp !== null && r.spread_pp >= 0) ? '#059669' : '#DC2626');
+
+  const ctx = document.getElementById('posSpreadChart').getContext('2d');
+  if (chartInstance) chartInstance.destroy();
+
+  chartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          type: 'line',
+          label: 'Gildan Activewear / PF Wholesale Sell-In YoY % (Col G / Col V)',
+          data: sellInSeries,
+          borderColor: '#0F172A',
+          backgroundColor: '#0F172A',
+          borderWidth: 2.4,
+          pointRadius: 4.5,
+          pointHoverRadius: 7,
+          tension: 0.15,
+          order: 1
+        },
+        {
+          type: 'line',
+          label: 'Disclosed Wholesale POS YoY % Midpoint (Col Y)',
+          data: posSeries,
+          borderColor: '#0D9488',
+          backgroundColor: '#0D9488',
+          borderDash: [5, 4],
+          borderWidth: 2.4,
+          pointRadius: 4.5,
+          pointHoverRadius: 7,
+          spanGaps: false,
+          tension: 0.15,
+          order: 2
+        },
+        {
+          type: 'bar',
+          label: 'Sell-In vs. POS Spread (pp: Col V minus Col Y)',
+          data: spreadSeries,
+          backgroundColor: barColors,
+          borderColor: barBorders,
+          borderWidth: 1.2,
+          order: 3
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        mode: 'index',
+        intersect: false
+      },
+      onClick: (evt, elements) => {
+        if (elements && elements.length > 0) {
+          const localIdx = elements[0].index;
+          const clickedRec = dataSlice[localIdx];
+          selectQuarterByGlobalIndex(clickedRec.idx - 1);
+        }
+      },
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: { font: { size: 11.5, weight: 'bold' } }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const rec = dataSlice[context.dataIndex];
+              if (context.datasetIndex === 0) return `Sell-In YoY %: ${fmtPct(rec.sell_in_yoy)} (${rec.sell_in_basis})`;
+              if (context.datasetIndex === 1) return `POS YoY % Midpoint: ${fmtPct(rec.pos_yoy)}`;
+              if (context.datasetIndex === 2) return `Sell-In vs. POS Spread: ${fmtPP(rec.spread_pp)} (Click point for full commentary)`;
+              return context.formattedValue;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { font: { size: 10.5, weight: 'bold' }, maxRotation: 50, minRotation: 40 }
+        },
+        y: {
+          title: {
+            display: true,
+            text: isCapped ? 'YoY Growth (%) / Spread (pp) [Capped at ±45% for Q2 2021]' : 'YoY Growth (%) / Spread (pp) [Uncapped]',
+            font: { size: 11.5, weight: 'bold' }
+          },
+          ticks: {
+            callback: function(value) { return value + '%'; }
+          }
+        }
+      }
+    }
+  });
+}
+
+function setWindow(w) {
+  currentWindow = w;
+  document.getElementById('btn-all').classList.toggle('active', w === 'all');
+  document.getElementById('btn-post2022').classList.toggle('active', w === 'post2022');
+  document.getElementById('btn-2024_2026').classList.toggle('active', w === '2024_2026');
+  renderChart();
+}
+
+function toggleScale() {
+  isCapped = !isCapped;
+  document.getElementById('btn-scale').classList.toggle('active', !isCapped);
+  renderChart();
+}
+
+renderChart();
+selectQuarterByGlobalIndex(selectedIdx);
+</script>
+</body>
+</html>
